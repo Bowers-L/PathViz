@@ -151,6 +151,7 @@
     <ClCompile Include="Src\Model\Vec3.cpp" />
     <ClCompile Include="Src\Model\VertDistPair.cpp" />
     <ClCompile Include="Src\Model\Vertex.cpp" />
+    <ClCompile Include="Src\Shaders\Shader.cpp" />
     <ClCompile Include="Src\Utility\GLDebug.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="Src\Model\Graph.h" />
     <ClInclude Include="Src\Model\Vec3.h" />
     <ClInclude Include="Src\Model\VertDistPair.h" />
+    <ClInclude Include="Src\Shaders\Shader.h" />
     <ClInclude Include="Src\Utility\GLDebug.h" />
     <ClInclude Include="Src\Model\Vertex.h" />
     <ClInclude Include="Src\Rendering\VertexArray.h" />

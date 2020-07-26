@@ -15,7 +15,12 @@ namespace graph {
 		return sqrt(pow(u.x - v.x, 2) + pow(u.y - v.y, 2) + pow(u.z - v.z, 2));
 	}
 
-	bool vec3::operator==(const vec3& other)
+	std::string vec3::toString() const
+	{
+		return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
+	}
+
+	bool vec3::operator==(const vec3& other) const
 	{
 		return ((this->x == other.x) && (this->y == other.y) && (this->z == other.z));
 	}

@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-#include "../Misc/GLDebug.h"
+#include "../Utility/GLDebug.h"
 #include "glad/glad.h"
 
 #include <iostream>

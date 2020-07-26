@@ -7,14 +7,14 @@ namespace graph {
 		m_Distance = vec3::calcDistance(u.getPos(), v.getPos());
 	}
 
-	Vertex Edge::getU() const
+	const Vertex& Edge::getU() const
 	{
-		return Vertex();
+		return m_U;
 	}
 
-	Vertex graph::Edge::getV() const
+	const Vertex& graph::Edge::getV() const
 	{
-		return Vertex();
+		return m_V;
 	}
 
 	double Edge::getDistance() const
@@ -22,9 +22,17 @@ namespace graph {
 		return m_Distance;
 	}
 
+	std::string Edge::toString() const
+	{
+		return "From " + getU().getLabel() + " To " + getV().getLabel() + " In " + std::to_string(getDistance());
+	}
+
 	bool Edge::operator==(const Edge& other) const
 	{
-		return (m_U == other.m_U) && (m_V == other.m_V) && (m_Distance == other.m_Distance);
+		//Edges with the vertices reversed are considered the same edge
+		return (((m_U == other.m_U) && (m_V == other.m_V)) 
+			|| ((m_U == other.m_V) && (m_V == other.m_U)))
+			&& (m_Distance == other.m_Distance);
 	}
 }
 

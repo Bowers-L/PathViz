@@ -11,16 +11,58 @@ Author: Logan Bowers
 #include "Utility/Util.h"
 #include "Utility/GLDebug.h"
 
-#define WIDTH 640
-#define HEIGHT 480
+#include "Model/Graph.h"
+
+#include "Shaders/Shader.h"
+
+#define WIDTH 1280
+#define HEIGHT 760
 
 static const bool DEBUG = true;
-static const char* title = "OpenGL Application";
+static const char* title = "Path Visualizer";
 
 int init(GLFWwindow*& window);
 
 int main(void) 
 {
+
+
+	Set<graph::Vertex> graphVertices = { 
+		{ "A", 0, 0 }, 
+		{ "B", 1, 0 }, 
+		{ "C", 5, 2 },
+		{ "D", 3, 3 },
+		{ "E", 5, 10 },
+		{ "F", 6, 0 },
+		{ "G", 2, 10 },
+		{ "H", 6, 5},
+	};
+
+	graph::Graph map(graphVertices, {});
+
+	map.addEdge("A", "B");
+	map.addEdge("A", "C");
+	map.addEdge("B", "D");
+	map.addEdge("B", "G");
+	map.addEdge("B", "C");
+	map.addEdge("C", "G");
+	map.addEdge("D", "F");
+	map.addEdge("E", "G");
+	map.addEdge("F", "G");
+	map.addEdge("F", "H");
+	map.addEdge("G", "H");
+
+
+	//graph::Vertex start = map.getLabeledVertex("A");
+
+	PRINTLN("Map: \n");
+	PRINT(map.toString());
+
+	PRINTLN("Minimum Spanning Tree: \n");
+	PRINT(map.getMSTDesc({ "A", 0, 0 }));
+	
+
+	/*Rendering Stuff*/
 	GLFWwindow* window;
 
 	float vertices[] = {
@@ -32,10 +74,14 @@ int main(void)
 	unsigned int VAO;
 	unsigned int VBO;
 
+
 	//Initialize the window + OpenGL context
 	if (init(window)) {
 		return -1;
 	}
+
+
+	Shader shader("Src/Shaders/Basic.shader");
 
 	//Create Vertex Array
 	GLCall(glGenVertexArrays(1, &VAO));
@@ -66,17 +112,18 @@ int main(void)
 
 	GLCall(glEnableVertexAttribArray(0));
 
+	shader.setUniform4f("u_Color", 0.4f, 0.2f, 0.2f, 1.0f);
+
 	while (!glfwWindowShouldClose(window)) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		/*Rendering Code*/
-
+		shader.bind();
 		GLCall(glBindVertexArray(VAO));
 		GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
 		glfwSwapBuffers(window);
-
 		glfwPollEvents();
 	}
 

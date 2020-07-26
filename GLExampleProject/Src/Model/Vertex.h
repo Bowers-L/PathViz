@@ -19,7 +19,9 @@ namespace graph {
 		~Vertex();
 
 		const std::string& getLabel() const;
-		vec3 getPos() const;
+		const vec3& getPos() const;
+
+		std::string toString() const;
 
 		bool operator==(const Vertex& other) const;
 	};

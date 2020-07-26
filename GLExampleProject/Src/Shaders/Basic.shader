@@ -3,11 +3,13 @@
 
 layout(location = 0) in vec4 vertPos;
 
-uniform mat4 u_MVP;
+out vec4 color;
+
+//uniform mat4 u_MVP;
 
 void main()
 {
-	gl_Position = u_MVP * vertPos;
+	gl_Position = vertPos;
 };
 
 #shader fragment

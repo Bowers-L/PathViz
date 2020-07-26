@@ -4,7 +4,7 @@
 
 namespace graph {
 	Vertex::Vertex()
-		: m_Label("Unnamed"), m_Pos(0, 0, 0)
+		: m_Label("Unnamed Vertex"), m_Pos(0, 0, 0)
 	{
 	}
 
@@ -27,9 +27,14 @@ namespace graph {
 		return m_Label;
 	}
 
-	vec3 Vertex::getPos() const
+	const vec3& Vertex::getPos() const
 	{
 		return m_Pos;
+	}
+
+	std::string Vertex::toString() const
+	{
+		return "(" + getLabel() + ", " + getPos().toString() + ")";
 	}
 
 	bool Vertex::operator==(const Vertex& other) const

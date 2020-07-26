@@ -7,4 +7,8 @@ namespace graph
 	{
 
 	}
+	std::string VertDistPair::toString() const
+	{
+		return "Vertex: " + vertex.getLabel() + " Distance To: " + std::to_string(distance);
+	}
 }

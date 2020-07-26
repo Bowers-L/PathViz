@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace graph {
 
 	struct vec3 {
@@ -9,7 +11,9 @@ namespace graph {
 
 		static double calcDistance(vec3 u, vec3 v);
 
-		bool operator==(const vec3& other);
+		std::string toString() const;
+
+		bool operator==(const vec3& other) const;
 	};
 
 }

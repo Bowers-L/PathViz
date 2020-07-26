@@ -11,5 +11,7 @@ namespace graph {
 		double distance;
 
 		VertDistPair(Vertex vertex, double distance);
+
+		std::string toString() const;
 	};
 }

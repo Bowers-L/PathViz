@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../vendor/glm/glm.hpp"
+#include "../external/glm/glm.hpp"
 
 #include <string>
 #include <unordered_map>
