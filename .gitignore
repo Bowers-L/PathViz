@@ -1,0 +1,20 @@
+# output files
+*.obj
+*.o
+*.lo
+*.slo
+
+**/Debug
+
+# Executables
+
+*.exe
+*.out
+*.app
+
+# IDE Configuration
+
+**/.vs
+
+*.sln
+*.vcxproj
