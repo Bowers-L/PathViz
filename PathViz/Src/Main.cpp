@@ -11,7 +11,7 @@ Author: Logan Bowers
 #include "Utility/Util.h"
 #include "Utility/GLDebug.h"
 
-#include "Model/Graph.h"
+#include "Model/MapGraph.h"
 
 #include "Shaders/Shader.h"
 
@@ -27,7 +27,7 @@ int main(void)
 {
 
 
-	Set<graph::Vertex> graphVertices = { 
+	Set<model::Location> locations = { 
 		{ "A", 0, 0 }, 
 		{ "B", 1, 0 }, 
 		{ "C", 5, 2 },
@@ -38,19 +38,19 @@ int main(void)
 		{ "H", 6, 5},
 	};
 
-	graph::Graph map(graphVertices, {});
+	model::MapGraph map(locations, {});
 
-	map.addEdge("A", "B");
-	map.addEdge("A", "C");
-	map.addEdge("B", "D");
-	map.addEdge("B", "G");
-	map.addEdge("B", "C");
-	map.addEdge("C", "G");
-	map.addEdge("D", "F");
-	map.addEdge("E", "G");
-	map.addEdge("F", "G");
-	map.addEdge("F", "H");
-	map.addEdge("G", "H");
+	map.addPath("A", "B");
+	map.addPath("A", "C");
+	map.addPath("B", "D");
+	map.addPath("B", "G");
+	map.addPath("B", "C");
+	map.addPath("C", "G");
+	map.addPath("D", "F");
+	map.addPath("E", "G");
+	map.addPath("F", "G");
+	map.addPath("F", "H");
+	map.addPath("G", "H");
 
 
 	//graph::Vertex start = map.getLabeledVertex("A");
@@ -58,8 +58,13 @@ int main(void)
 	PRINTLN("Map: \n");
 	PRINT(map.toString());
 
-	PRINTLN("Minimum Spanning Tree: \n");
-	PRINT(map.getMSTDesc({ "A", 0, 0 }));
+	//PRINTLN("Minimum Spanning Tree: \n");
+	//PRINT(map.getMSTDesc({ "A", 0, 0 }));
+
+	model::Route path = map.findShortestPathFromTo("A", "B");
+	PRINT(path.routeDesc());
+
+	
 	
 
 	/*Rendering Stuff*/
@@ -81,7 +86,7 @@ int main(void)
 	}
 
 
-	Shader shader("Src/Shaders/Basic.shader");
+	Shader shader("PathViz/Src/Shaders/Basic.shader");
 
 	//Create Vertex Array
 	GLCall(glGenVertexArrays(1, &VAO));

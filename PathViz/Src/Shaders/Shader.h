@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "../external/glm/glm.hpp"
-
 #include <string>
 #include <unordered_map>
 
@@ -29,7 +27,7 @@ public:
 	void setUniform1f(const std::string& name, float f);
 	void setUniform3f(const std::string& name, float f0, float f1, float f2);
 	void setUniform4f(const std::string& name, float f0, float f1, float f2, float f3);
-	void setUniformMat4f(const std::string& name, const glm::mat4& mat4);
+	void setUniformMat4f(const std::string& name, const float *mat);
 private:
 	unsigned int createShader(const std::string& vertextShader, const std::string& fragmentShader);
 	unsigned int compileShader(unsigned int type, const std::string& source);
