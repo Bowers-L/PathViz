@@ -6,6 +6,8 @@ Author: Logan Bowers
 //External Dependencies
 #include <glad/glad.h>
 #include <glfw3.h>
+#include <glm.hpp>
+#include <ext.hpp>
 
 //My Includes
 #include "Utility/Util.h"
@@ -13,7 +15,7 @@ Author: Logan Bowers
 
 #include "Model/MapGraph.h"
 
-#include "Rendering/Shaders/Shader.h"
+#include "Rendering/Renderer.h"
 
 #define WIDTH 1280
 #define HEIGHT 760
@@ -23,11 +25,14 @@ static const char* title = "Path Visualizer";
 
 int init(GLFWwindow*& window);
 
+using namespace model;
+using namespace rendering;
+
 int main(void) 
 {
 
 
-	Set<model::Location> locations = { 
+	Set<Location> locations = { 
 		{ "A", 0, 0 }, 
 		{ "B", 1, 0 }, 
 		{ "C", 5, 2 },
@@ -38,7 +43,7 @@ int main(void)
 		{ "H", 6, 5},
 	};
 
-	model::MapGraph map(locations, {});
+	MapGraph map(locations, {});
 
 	map.addPath("A", "B");
 	map.addPath("A", "C");
@@ -52,7 +57,6 @@ int main(void)
 	map.addPath("F", "H");
 	map.addPath("G", "H");
 
-
 	//graph::Vertex start = map.getLabeledVertex("A");
 
 	PRINTLN("Map: \n");
@@ -61,70 +65,44 @@ int main(void)
 	//PRINTLN("Minimum Spanning Tree: \n");
 	//PRINT(map.getMSTDesc({ "A", 0, 0 }));
 
-	model::Route path = map.findShortestPathFromTo("A", "E");
+	Route path = map.findShortestPathFromTo("A", "E");
 	PRINT(path.routeDesc());
 
 
 	/*Rendering Stuff*/
+
 	GLFWwindow* window;
-
-	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
-	};
-
-	unsigned int VAO;
-	unsigned int VBO;
-
 
 	//Initialize the window + OpenGL context
 	if (init(window)) {
 		return -1;
 	}
 
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f
+	};
 
 	Shader shader("PathViz/Src/Rendering/Shaders/Basic.shader");
 
 	//Create Vertex Array
-	GLCall(glGenVertexArrays(1, &VAO));
+	VertexArray vao = VertexArray();
+	VertexBuffer vbo = VertexBuffer(vertices, sizeof(vertices), 3);
 
-	//Create a buffer on the GPU and assign an id to the buffer to VBO
-	GLCall(glGenBuffers(1, &VBO));	
-
-	GLCall(glBindVertexArray(VAO));
-
-	//Bind the buffer object to the target GL_ARRAY_BUFFER
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));	
-
-	//Copy the vertex data into the buffer
-	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), (void*)vertices, GL_STATIC_DRAW));	
-
-
-	//Specify Vertex Attribute
-	/*For an attribute:
-	index - The index of the attribute
-	size - The number of components in the attribute (the count: for example position attributes usually have size 2 or 3)
-	type - The data type of the components in this attribute
-	normalized - Whether the data should be normalized
-	stride - The number of bytes in between attributes (usually the size of the entire vertex)
-	pointer - The byte offset of the attribute inside the vertex
-	*/
-
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (const void*) 0));
-
-	GLCall(glEnableVertexAttribArray(0));
+	VertexBufferLayout layout;
+	layout.push(GL_FLOAT, 3);
+	vao.addBuffer(vbo, layout);
 
 	shader.setUniform4f("u_Color", 0.4f, 0.2f, 0.2f, 1.0f);
+	//shader.setUniformMat4f("u_MVP", (const float *) glm::value_ptr(glm::mat4(1.0f)));
 
 	while (!glfwWindowShouldClose(window)) {
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		Renderer::clear();
 
 		/*Rendering Code*/
-		shader.bind();
-		GLCall(glBindVertexArray(VAO));
-		GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+		Renderer::drawArrays(vao, shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
