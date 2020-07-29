@@ -4,13 +4,14 @@
 #include "../Utility/GLDebug.h"
 
 namespace rendering {
-	//GPU buffer allocated using OpenGL
-	class VertexBuffer {
+
+	//OpenGL Element Buffer used to store indices of vertices
+	class ElementBuffer {
 	private:
 		GLuint m_ID;
 		GLsizei m_Count;
 	public:
-		VertexBuffer(void* data, GLsizei size, GLsizei count);
+		ElementBuffer(void* data, size_t size);
 
 		GLsizei getCount() const;
 
@@ -18,3 +19,4 @@ namespace rendering {
 		void unbind() const;
 	};
 }
+

@@ -13,7 +13,7 @@ Author: Logan Bowers
 
 #include "Model/MapGraph.h"
 
-#include "Shaders/Shader.h"
+#include "Rendering/Shaders/Shader.h"
 
 #define WIDTH 1280
 #define HEIGHT 760
@@ -84,7 +84,7 @@ int main(void)
 	}
 
 
-	Shader shader("PathViz/Src/Shaders/Basic.shader");
+	Shader shader("PathViz/Src/Rendering/Shaders/Basic.shader");
 
 	//Create Vertex Array
 	GLCall(glGenVertexArrays(1, &VAO));

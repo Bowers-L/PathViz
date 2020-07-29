@@ -30,9 +30,6 @@
     <ClCompile Include="pathviz\src\model\Vec3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pathviz\src\shaders\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pathviz\src\utility\GLDebug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +52,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PathViz\Src\Rendering\VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\VertexBufferLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\ElementBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\Shaders\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,9 +95,6 @@
     <ClInclude Include="pathviz\src\rendering\VertexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pathviz\src\shaders\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pathviz\src\utility\GLDebug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,8 +119,20 @@
     <ClInclude Include="PathViz\Src\Model\Route.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PathViz\Src\Rendering\VertexBufferLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViz\Src\Rendering\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViz\Src\Rendering\ElementBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViz\Src\Rendering\Shaders\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PathViz\Src\Shaders\Basic.shader" />
+    <None Include="PathViz\Src\Rendering\Shaders\Basic.shader" />
   </ItemGroup>
 </Project>
