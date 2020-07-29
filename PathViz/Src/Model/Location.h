@@ -40,7 +40,7 @@ namespace std
 		size_t
 			operator()(const model::Location& obj) const
 		{
-			return hash<string>()(obj.getLabel()) * 11 + hash<vec3>()(obj.getPos());
+			return hash<string>()(obj.getLabel());
 		}
 	};
 }

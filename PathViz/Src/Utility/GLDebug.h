@@ -4,7 +4,6 @@ OpenGL functions to the terminal, since this is not done automatically
 and needs to be polled using glGetError()
 */
 
-
 #pragma once
 
 #include "Util.h"

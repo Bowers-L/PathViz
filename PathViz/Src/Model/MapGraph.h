@@ -60,21 +60,16 @@ namespace model {
 		void removeLocation(Location v);
 
 		/*
-		Finds the shortest path from u to v using the A* algorithm.
+		Finds the shortest path from start to dest using the A* algorithm.
 		*/
-		Route findShortestPathFromTo(const Location& start, const Location& end);
-		Route findShortestPathFromTo(const std::string& start, const std::string& end);
+		Route findShortestPathFromTo(const Location& start, const Location& dest);
+		Route findShortestPathFromTo(const std::string& start, const std::string& dest);
 
 		/*
-		Getters for member fields
+		Basic getters for member fields
 		*/
 		const Set<Location>& getLocations() const;
 		const Set<Path>& getPaths() const;
-
-		/*
-		Finds the Location in the graph with the given label and returns it
-		*/
-		const Location& getLabeledLocation(std::string label) const;
 
 		/*
 			Returns the minimum spanning tree of this graph

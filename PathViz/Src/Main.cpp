@@ -61,11 +61,9 @@ int main(void)
 	//PRINTLN("Minimum Spanning Tree: \n");
 	//PRINT(map.getMSTDesc({ "A", 0, 0 }));
 
-	model::Route path = map.findShortestPathFromTo("A", "B");
+	model::Route path = map.findShortestPathFromTo("A", "E");
 	PRINT(path.routeDesc());
 
-	
-	
 
 	/*Rendering Stuff*/
 	GLFWwindow* window;

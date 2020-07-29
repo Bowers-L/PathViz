@@ -39,7 +39,7 @@ namespace model {
 
 	bool Location::operator==(const Location& other) const
 	{
-		return (getPos() == other.getPos() && getLabel().compare(other.getLabel()));
+		return (getLabel().compare(other.getLabel()) == 0);
 	}
 
 	bool Location::operator!=(const Location& other) const 

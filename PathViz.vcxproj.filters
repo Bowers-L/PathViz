@@ -54,6 +54,9 @@
     <ClCompile Include="PathViz\Src\Model\Route.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PathViz\Src\Rendering\VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h">

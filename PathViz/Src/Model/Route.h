@@ -22,7 +22,7 @@ namespace model {
 
 		const SLL<Path> *getPaths() const;
 
-		const std::string& routeDesc() const;
+		std::string routeDesc() const;
 	};
 
 

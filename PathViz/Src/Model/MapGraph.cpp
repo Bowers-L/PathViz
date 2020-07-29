@@ -1,5 +1,6 @@
 #include "MapGraph.h"
 #include "PathFindingEntry.h"
+#include "../Utility/Util.h"
 
 #include <sstream>
 #include <limits>
@@ -105,26 +106,28 @@ namespace model {
 		m_AdjList.erase(v);
 	}
 
-	Route MapGraph::findShortestPathFromTo(const Location& start, const Location& end)
+	Route MapGraph::findShortestPathFromTo(const Location& start, const Location& dest)
 	{
 		Set<Location> visited = Set<Location>();
 
 		//Each map key points to a pair containing the distance from the start to that location 
 		//and the location that was visited directly before the key location
 		//The extra location is used for backtracking once the correct path is found
-		Map<Location, PathFindingMapEntry> currShortestPaths = Map<Location, PathFindingMapEntry>();
+		auto currShortestPaths = Map<Location, PathFindingMapEntry>();
 
 		auto queue = PQ<PathFindingQueueEntry, Vector<PathFindingQueueEntry>, minHeapPathFindingComp>();
 
-		for (Location loc : m_Locations) {
-			currShortestPaths[loc] = PathFindingMapEntry(nullptr, std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-		}
-		currShortestPaths[start] = PathFindingMapEntry(&start, 0, vec3::calcDistance(start.getPos(), end.getPos()));
+		typedef Map<Location, PathFindingMapEntry>::value_type MapInsert;
 
-		queue.push(PathFindingQueueEntry(&start, nullptr, 0, vec3::calcDistance(start.getPos(), end.getPos())));
+		for (Location loc : m_Locations) {
+			currShortestPaths.emplace(loc, PathFindingMapEntry(nullptr, std::numeric_limits<double>::max(), std::numeric_limits<double>::max()));
+		}
+		put(currShortestPaths, start, PathFindingMapEntry(nullptr, 0, vec3::calcDistance(start.getPos(), dest.getPos())));
+
+		queue.push(PathFindingQueueEntry(&start, nullptr, 0, vec3::calcDistance(start.getPos(), dest.getPos())));
 	
-		while (!queue.empty && (visited.find(end) == visited.end())) {
-			//queue is not empty & haven't processed the end location yet
+		while (!queue.empty() && (visited.find(dest) == visited.end())) {
+			//queue is not empty & haven't processed the dest location yet
 
 			PathFindingQueueEntry curr = queue.top();
 			queue.pop();
@@ -132,14 +135,14 @@ namespace model {
 			if (visited.find(*curr.loc) == visited.end()) {	//Haven't gotten to curr yet
 				visited.insert(*curr.loc);
 
-				for (LocDistPair neighbor : m_AdjList[*curr.loc]) {
+				for (LocDistPair& neighbor : m_AdjList[*curr.loc]) {
 					//calculate total cost
 					double distToStartCost = curr.distFromStart + neighbor.dist;
-					double totalCost = distToStartCost + vec3::calcDistance(neighbor.loc.getPos(), end.getPos());
+					double totalCost = distToStartCost + vec3::calcDistance(neighbor.loc.getPos(), dest.getPos());
 
-					if (distToStartCost < currShortestPaths[neighbor.loc].distFromStart) {
+					if (distToStartCost < currShortestPaths.find(neighbor.loc)->second.distFromStart) {
 
-						currShortestPaths[neighbor.loc] = PathFindingMapEntry(curr.loc, distToStartCost, totalCost);
+						put(currShortestPaths, neighbor.loc, PathFindingMapEntry(curr.loc, distToStartCost, totalCost));
 						queue.push(PathFindingQueueEntry(&neighbor.loc, curr.loc, distToStartCost, totalCost));
 					}
 				}
@@ -149,27 +152,26 @@ namespace model {
 
 		//Using a stack so that backtracking results in the top of the stack being the first path
 		SLL<Path> *shortestPath = new SLL<Path>();
-		PathFindingMapEntry currEntry = currShortestPaths[end];
-		const Location *curr = &end;
-		while (currEntry.prevLoc != nullptr) {
+		const Location *curr = &dest;
+		while (currShortestPaths.find(*curr)->second.prevLoc != nullptr) {
 
-			shortestPath->push_front(Path(*currShortestPaths[*curr].prevLoc, *curr));
-			curr = currShortestPaths[*curr].prevLoc;
+			shortestPath->push_front(Path(*currShortestPaths.find(*curr)->second.prevLoc, *curr));
+			curr = currShortestPaths.find(*curr)->second.prevLoc;
 		}
 
-		if (shortestPath->front().getU().getLabel().compare(start.getLabel()) != 0) {
+		if (shortestPath->empty() || shortestPath->front().getU().getLabel().compare(start.getLabel()) != 0) {
 			//The path doesn't start at the start, so it is an illegal path.
-			return nullptr;
+			return Route(start, dest, nullptr);
 		}
 
-		return Route(shortestPath);
+		return Route(start, dest, shortestPath);
 	}
 
-	Route MapGraph::findShortestPathFromTo(const std::string& start, const std::string& end)
+	Route MapGraph::findShortestPathFromTo(const std::string& start, const std::string& dest)
 	{
 		const Location* startLoc;
 		const Location* endLoc;
-		if ((startLoc = findLocation(start)) && (endLoc = findLocation(end))) {
+		if ((startLoc = findLocation(start)) && (endLoc = findLocation(dest))) {
 			return findShortestPathFromTo(*startLoc, *endLoc);
 		}
 
@@ -183,15 +185,6 @@ namespace model {
 	const Set<Path>& MapGraph::getPaths() const
 	{
 		return m_Paths;
-	}
-
-	const Location& MapGraph::getLabeledLocation(std::string label) const
-	{
-		for (Location v : m_Locations) {
-			if (label.compare(v.getLabel()) == 0) {
-				return v;
-			}
-		}
 	}
 
 	Set<Path> MapGraph::getMST(Location start) const
