@@ -6,6 +6,11 @@ namespace model {
 	{
 	}
 
+	Route::~Route()
+	{
+		delete m_Paths;
+	}
+
 	const SLL<Path> *Route::getPaths() const
 	{
 		return m_Paths;

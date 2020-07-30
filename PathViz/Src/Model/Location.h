@@ -13,8 +13,8 @@ namespace model {
 
 	public:
 		Location();
-		Location(const std::string& label, float x, float y);
-		Location(const std::string& label, float x, float y, float z);
+		Location(std::string label, float x, float y);
+		Location(std::string label, float x, float y, float z);
 
 		~Location();
 

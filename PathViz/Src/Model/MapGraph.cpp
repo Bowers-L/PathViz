@@ -2,8 +2,11 @@
 #include "PathFindingEntry.h"
 #include "../Utility/Util.h"
 
+
 #include <sstream>
 #include <limits>
+#include <cstdlib>
+#include <math.h>
 
 
 namespace model {
@@ -285,6 +288,65 @@ namespace model {
 		}
 
 		return total;
+	}
+
+	MapGraph MapGraph::generateRandomGraph(int numLocations, float width, float height, unsigned int seed)
+	{
+		int spreadX = numLocations / 2;
+		int spreadY = 2;
+		int numPerCell = numLocations / (spreadX * spreadY);
+		srand(seed);
+
+		Set<Location> locations;
+		for (int i = 0; i < numLocations; i++) {
+			
+			//figuring out the label
+			std::string label;
+
+			if (i < 26) {
+				label.insert(0, 1, 'A' + i);
+			}
+			else {
+				int temp = i;
+				while (temp >= 26) {
+					label.insert(0, 1, 'A' + temp % 26);
+					temp /= 26;
+				}
+				label.insert(0, 1, 'A' + temp % 26 - 1);
+			}
+
+
+			int cell = i / numPerCell;
+			int x;
+			int y;
+			if (cell >= spreadX * spreadY) {
+				x = rand() % (int)width;
+				y = rand() % (int)height;
+			}
+			else {
+				x = (cell % spreadX) * (width / spreadX) + (float)(rand() % (int)(width / spreadX));
+				y = (cell / spreadX) * (height / spreadY) + (float)(rand() % (int)(height / spreadY));
+			}
+
+			locations.insert(Location(label, x, y));
+		}
+
+		Set<Path> paths;
+		for (Location l : locations) {
+			for (Location other : locations) {
+				if (l != other) {
+					int prob = (int) (100 * pow(1 - vec3::calcDistance(l.getPos(), other.getPos()) / sqrt(pow(width, 2) + pow(height, 2)), 5) / 2);
+
+					if (rand() % 100 >= (100 - prob)) {
+						paths.insert(Path(l, other));
+					}
+				}
+
+
+			}
+		}
+
+		return MapGraph(locations, paths);
 	}
 
 	const Location* MapGraph::findLocation(const std::string& label)

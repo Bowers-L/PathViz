@@ -1,5 +1,5 @@
 /*
-Path Visualizer using OpenGL
+Path Finder/Visualizer using OpenGL
 Author: Logan Bowers
 */
 
@@ -31,20 +31,22 @@ using namespace rendering;
 int main(void) 
 {
 
-
-	Set<Location> locations = { 
-		{ "A", 0, 0 }, 
-		{ "B", 1, 0 }, 
-		{ "C", 5, 2 },
-		{ "D", 3, 3 },
-		{ "E", 5, 10 },
-		{ "F", 6, 0 },
-		{ "G", 2, 10 },
-		{ "H", 6, 5},
+	/*
+	Set<Location> locations = {
+		{ "A", 0, 4 }, 
+		{ "B", -1, 2 }, 
+		{ "C", 1, 2 },
+		{ "D", -1, 0 },
+		{ "E", 3, 0 },
+		{ "F", -1, -2 },
+		{ "G", 0, 0 },
+		{ "H", 1, -2},
 	};
+	*/
 
-	MapGraph map(locations, {});
+	MapGraph map = MapGraph::generateRandomGraph(50, WIDTH, HEIGHT, 100);
 
+	/*
 	map.addPath("A", "B");
 	map.addPath("A", "C");
 	map.addPath("B", "D");
@@ -56,6 +58,7 @@ int main(void)
 	map.addPath("F", "G");
 	map.addPath("F", "H");
 	map.addPath("G", "H");
+	*/
 
 	//graph::Vertex start = map.getLabeledVertex("A");
 
@@ -65,8 +68,8 @@ int main(void)
 	//PRINTLN("Minimum Spanning Tree: \n");
 	//PRINT(map.getMSTDesc({ "A", 0, 0 }));
 
-	Route path = map.findShortestPathFromTo("A", "E");
-	PRINT(path.routeDesc());
+	Route route = map.findShortestPathFromTo("A", "O");
+	PRINT(route.routeDesc());
 
 
 	/*Rendering Stuff*/
@@ -78,31 +81,47 @@ int main(void)
 		return -1;
 	}
 
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
-	};
+	float zoom = 1.0f;
 
 	Shader shader("PathViz/Src/Rendering/Shaders/Basic.shader");
 
-	//Create Vertex Array
-	VertexArray vao = VertexArray();
-	VertexBuffer vbo = VertexBuffer(vertices, sizeof(vertices), 3);
 
-	VertexBufferLayout layout;
-	layout.push(GL_FLOAT, 3);
-	vao.addBuffer(vbo, layout);
+	shader.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-	shader.setUniform4f("u_Color", 0.4f, 0.2f, 0.2f, 1.0f);
-	//shader.setUniformMat4f("u_MVP", (const float *) glm::value_ptr(glm::mat4(1.0f)));
+	//glm::mat4 view = glm::mat4(1.0f);
+	//shader.setUniformMat4f("u_View", (const float *) glm::value_ptr(glm::translate(view, glm::vec3()
+	shader.setUniformMat4f("u_Proj", (const float *) glm::value_ptr(glm::ortho((float) 0.0f, (float) WIDTH / zoom, (float) HEIGHT / zoom, 0.0f, -1.0f, 1.0f)));
+
 
 	while (!glfwWindowShouldClose(window)) {
 
 		Renderer::clear();
 
 		/*Rendering Code*/
-		Renderer::drawArrays(vao, shader);
+		shader.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+
+		for (Location l : map.getLocations()) {
+			Renderer::drawCircle(l.getPos().x, l.getPos().y, 3.0f, shader);
+		}
+
+		for (Path p : map.getPaths()) {
+				Renderer::drawLine(	p.getU().getPos().x, p.getU().getPos().y,
+									p.getV().getPos().x, p.getV().getPos().y,
+									2.0f, shader);
+
+		}
+
+		shader.setUniform4f("u_Color", 0.90f, 0.86f, 0.0f, 1.0f);
+
+		vec3 start = route.getPaths()->front().getU().getPos();
+		Renderer::drawCircle(start.x, start.y, 3.0f, shader);
+		for (Path p : *route.getPaths()) {
+			Renderer::drawLine(	p.getU().getPos().x, p.getU().getPos().y,
+								p.getV().getPos().x, p.getV().getPos().y,
+								2.0f, shader);
+
+			Renderer::drawCircle(p.getV().getPos().x, p.getV().getPos().y, 3.0f, shader);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

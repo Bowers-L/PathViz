@@ -13,6 +13,8 @@ namespace rendering {
 	public:
 		VertexArray();
 
+		~VertexArray();
+
 		void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
 		GLsizei getCount() const;

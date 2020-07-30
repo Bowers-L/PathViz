@@ -11,6 +11,7 @@ namespace rendering {
 		GLsizei m_Count;
 	public:
 		VertexBuffer(void* data, GLsizei size, GLsizei count);
+		~VertexBuffer();
 
 		GLsizei getCount() const;
 

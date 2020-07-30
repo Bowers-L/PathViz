@@ -1,15 +1,15 @@
 #shader vertex
 #version 330 core
 
-layout(location = 0) in vec4 vertPos;
+layout(location = 0) in vec3 vertPos;
 
 out vec4 color;
 
-//uniform mat4 u_MVP;
+uniform mat4 u_Proj;
 
 void main()
 {
-	gl_Position = vertPos;
+	gl_Position = u_Proj * vec4(vertPos, 1.0f);
 };
 
 #shader fragment

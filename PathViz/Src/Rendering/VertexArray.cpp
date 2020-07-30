@@ -7,11 +7,17 @@ namespace rendering {
 		m_Count = 0;
 	}
 
+	VertexArray::~VertexArray()
+	{
+		GLCall(glDeleteVertexArrays(1, &m_ID));
+	}
+
 	void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
 	{
 		unsigned int i = 0;
 		unsigned int offset = 0;
 
+		bind();
 		vb.bind();
 		for (std::pair<GLenum, GLuint> element : layout.getElements()) {
 			//Specify Vertex Attribute
@@ -32,6 +38,8 @@ namespace rendering {
 		}
 
 		m_Count = vb.getCount();
+		vb.unbind();
+		unbind();
 	}
 
 	GLsizei VertexArray::getCount() const

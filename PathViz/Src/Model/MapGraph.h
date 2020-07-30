@@ -85,6 +85,8 @@ namespace model {
 		*/
 		static double totalDistance(const Set<Path>& paths);
 
+		static MapGraph generateRandomGraph(int numLocations, float width, float height, unsigned int seed);
+
 	private:
 		const Location* findLocation(const std::string& label);
 		void constructAdjList();

@@ -10,6 +10,11 @@ namespace rendering {
 		m_Count = count;
 	}
 
+	VertexBuffer::~VertexBuffer()
+	{
+		GLCall(glDeleteBuffers(1, &m_ID));
+	}
+
 	GLsizei VertexBuffer::getCount() const
 	{
 		return m_Count;

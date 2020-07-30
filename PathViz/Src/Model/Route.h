@@ -20,6 +20,8 @@ namespace model {
 	public:
 		Route(const Location& start, const Location& dest, SLL<Path>* paths);
 
+		~Route();
+
 		const SLL<Path> *getPaths() const;
 
 		std::string routeDesc() const;

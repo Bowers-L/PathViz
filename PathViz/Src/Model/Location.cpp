@@ -8,12 +8,12 @@ namespace model {
 	{
 	}
 
-	Location::Location(const std::string& label, float x, float y)
+	Location::Location(std::string label, float x, float y)
 		: m_Label(label), m_Pos(x, y, 0)
 	{
 	}
 
-	Location::Location(const std::string& label, float x, float y, float z)
+	Location::Location(std::string label, float x, float y, float z)
 		: m_Label(label), m_Pos(x, y, z)
 	{
 	}
